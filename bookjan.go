@@ -2,7 +2,6 @@ package koa
 
 import (
 	"errors"
-	"fmt"
 )
 
 var invalidBookJan error = errors.New("Invalid Book JAN code")
@@ -41,14 +40,7 @@ func GetCcode(s string) (string, error) {
 	if !IsValidBookJan(s) {
 		return "", invalidBookJan
 	}
-	var raw uint16
-	fmt.Sscan(s[17:21], &raw)
-	c := s[17:21]
-	if CIsValid(c) {
-		return c, nil
-	} else {
-		return "", invalidCcodeFormat
-	}
+	return SGetCcode(s[13:])
 }
 
 // Price (yen), Tax included, error
