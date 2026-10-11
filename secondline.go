@@ -3,6 +3,7 @@ package koa
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 )
 
 var invalidSecondLineFormat error = fmt.Errorf("Invalid book jan second line format")
@@ -27,7 +28,11 @@ func SGetPrice(s string) (uint32, bool, error) {
 	match := secondLinePattern.FindStringSubmatch(s)
 	includeTax := match[1] == "1"
 	var price uint32
-	fmt.Sscan(match[3], &price)
+	p, err := strconv.ParseUint(match[3], 10, 32)
+	if err != nil {
+		return 0, false, err
+	}
+	price = uint32(p)
 	return price, includeTax, nil
 }
 
